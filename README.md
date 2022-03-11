@@ -184,6 +184,8 @@ To make this a bit more clear, this repo should provide some examples on how to 
 
 ## Miscellaneous notes
 
+[llvm-tutor](https://github.com/banach-space/llvm-tutor/) is a great resource for writing out-of-tree LLVM passes and much of this was inspired by that work.
+
 If you use the new pass manager with `lld` you need to also include `-mllvm=-load=` to load any additional CLI arguments your pass is exposing.
 (It's not working anyways currently but hopefully soon if https://reviews.llvm.org/D120490 is merged).
 
