@@ -130,34 +130,38 @@ with LTO (unsure right now):
 
 ## Legacy Pass Manager Callbacks
 
+(feel free to skip, this is just to find the correct functions again when debugging)
+
 Loading Passes:
-RegisterPass (used with `opt`)
+RegisterPass (used with `opt`):
 - Pass goes into PassRegistry
 - through listener the cli option is registered (in `passRegistered`)
 
-RegisterStandardPasses (used with `clang`/`lld`?)
-calls `addGlobalExtension`
-`addExtensionsToPM` adds `GlobalExtension` passes for the correct extension point
+RegisterStandardPasses (used with `clang`/`lld`):
+- calls `addGlobalExtension`
+- `addExtensionsToPM` adds `GlobalExtension` passes for the correct extension point
 
 Running Passes:
-to enable use (`--legacy-hello`):
-loading the pass enabled that cli option:
-setting it will trigger `handleOccurrence` (in `Commandline.h`) which sets pass as a command line option
-within `opt` this is then located in `PassList`
+- to enable use (`--legacy-hello`):
+  - loading the pass enabled that cli option:
+  - setting it will trigger `handleOccurrence` (in `Commandline.h`) which sets pass as a command line option
+  - within `opt` this is then located in `PassList`
 
 ## New Pass Manager Callbacks
 
+(feel free to skip, this is just to find the correct functions again when debugging)
+
 Loading Passes:
-`-load-pass-plugin` loads passes into `PassPlugins` (with `opt`)
-`PassPlugin->registerPassBuilderCallbacks(PB);` in `runPassPipeline` registers callbacks to register the pass
+- `-load-pass-plugin` loads passes into `PassPlugins` (with `opt`)
+  - `PassPlugin->registerPassBuilderCallbacks(PB);` in `runPassPipeline` registers callbacks to register the pass
 
-`fpass-plugin` loads pass (with `clang`) directly into `PassPlugins`
-in `EmitAssemblyWithNewPassManager` the `PassPlugins` get loaded and `registerPassBuilderCallbacks` is called
+- `fpass-plugin` loads pass (with `clang`) directly into `PassPlugins`
+  - in `EmitAssemblyWithNewPassManager` the `PassPlugins` get loaded and `registerPassBuilderCallbacks` is called
 
-Running Passes:
-* registerPipelineParsingCallback (used with `opt`) (doesn't run on clang)
-`PassPipeline` is passed in through `-passes=""`
-runs within `parsePassPipeline` (called by `runPassPipeline`) (no control where in the pipeline the pass is inserted?)
+Running Passes with `opt`:
+-  registerPipelineParsingCallback
+  - `PassPipeline` is passed in through `-passes=""`
+  - runs within `parsePassPipeline` (called by `runPassPipeline`) (no control where in the pipeline the pass is inserted?)
 
 ## LTO: Full vs Thin
 ```
