@@ -1,13 +1,17 @@
 cmake_minimum_required(VERSION 3.4.3)
-project(llvm-passes)
 
 set(CMAKE_CXX_STANDARD 11)
 
-if(NOT DEFINED ENV{LLVM_HOME})
-  message(FATAL_ERROR "$LLVM_HOME is not defined")
+if(NOT DEFINED ENV{LLVMPREFIX})
+  message(FATAL_ERROR "$LLVMPREFIX is not defined")
 else ()
-  set(ENV{LLVM_DIR} $ENV{LLVM_HOME}/lib/cmake/llvm)
+  set(ENV{LLVM_DIR} $ENV{LLVMPREFIX}/lib/cmake/llvm)
 endif()
+
+SET (CMAKE_C_COMPILER             $ENV{LLVMPREFIX}/bin/clang)
+SET (CMAKE_CXX_COMPILER           $ENV{LLVMPREFIX}/bin/clang++)
+
+project(llvm-passes)
 
 find_package(LLVM REQUIRED CONFIG)
 add_definitions(${LLVM_DEFINITIONS})
